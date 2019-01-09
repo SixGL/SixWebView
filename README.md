@@ -1,5 +1,7 @@
 # SixWebView
 Webview以构造者设计模式封装，快捷使用方式
+# 使用
+  compile 'com.github.SixGL:SixWebView:V1.0'
 ## 使用方式
      SixWebView builder = new SixWebView.Builder(this).
                 setWebView(mWebview)
