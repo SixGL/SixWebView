@@ -10,6 +10,11 @@ import android.webkit.WebView;
 public abstract class WebViewClientListener {
 
 
+    //默认返回false
+    public  boolean shouldOverrideUrlLoading(WebView view, String url){
+
+        return false;
+    }
 
     public void onPageStarted(android.webkit.WebView view, String url, Bitmap favicon) {
 

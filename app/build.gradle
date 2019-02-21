@@ -24,4 +24,5 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     implementation project(':sixweblibrary')
+//    compile 'com.github.SixGL:SixWebView:V1.0'
 }

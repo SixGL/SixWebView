@@ -9,21 +9,26 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.*;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.six.webview.web.listener.OnLongClickListener;
 import com.six.webview.web.listener.WebChromeClientListener;
 import com.six.webview.web.listener.WebViewClientListener;
+
+import java.util.Map;
 
 /**
  * Created by admin on 2018/9/4.
  */
 
 public class WebController {
-    public String TAG = "Six->C ";
+    public String TAG = "SixWeb->C ";
     public Context mContext;
     public String url;
     public android.webkit.WebView webView;
     public boolean supportJs = true;
+    public boolean isSupportWebHead = false;
+    public Map<String, String> webHeadMap;
     public String jsName;
     public JSInteraction jsInteraction;
     public WebChromeClientListener webChromeClient;
@@ -61,6 +66,14 @@ public class WebController {
     }
 
     /**
+     * 设置webview支持添加请求头
+     */
+    public void setWebHead(boolean b, Map<String, String> headMap) {
+        this.isSupportWebHead = b;
+        this.webHeadMap = headMap;
+    }
+
+    /**
      * 设置是否支持js交互 默认支持js交互如果不需要支持 调用此方法，传入false
      */
     public void setSupportJS(boolean b) {
@@ -91,7 +104,11 @@ public class WebController {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                if (webViewClient != null) {
+                    webViewClient.shouldOverrideUrlLoading(view, url);
+                } else {
+                    Log.i(TAG, "onPageStarted-> webViewClientListener is null");
+                }
                 return super.shouldOverrideUrlLoading(view, url);
             }
 
@@ -129,36 +146,17 @@ public class WebController {
         });
     }
 
-
-    public static class WebParams {
-        public String TAG = "Six->P";
-        public Context mContext;
-        public String url;
-        public android.webkit.WebView webView;
-        public boolean supportJs;
-        public String jsName;
-        public JSInteraction jsInteraction;
-        //        public WebViewListener.WebChromeClientListener webChromeClient;
-        public WebChromeClientListener webChromeClient;
-        public WebViewClientListener webViewClient;
-        public OnLongClickListener onLongClickListener;
-//        public WebViewListener.WebViewClientListener webViewClient;
-
-        public WebParams(Context context) {
-            mContext = context;
+    @SuppressLint("JavascriptInterface")
+    public void setWebSetting() {
+        WebSettings mWebSettings = webView.getSettings();
+        webView.setHorizontalScrollBarEnabled(false);//水平不显示
+        webView.setVerticalScrollBarEnabled(false); //垂直不显示
+        mWebSettings.setBuiltInZoomControls(false);
+        mWebSettings.setSavePassword(false);
+        mWebSettings.setJavaScriptEnabled(supportJs);
+        if (supportJs == true) {
+            webView.addJavascriptInterface(jsInteraction, jsName);
         }
-
-        @SuppressLint("JavascriptInterface")
-        public void setWebSetting() {
-            WebSettings mWebSettings = webView.getSettings();
-            webView.setHorizontalScrollBarEnabled(false);//水平不显示
-            webView.setVerticalScrollBarEnabled(false); //垂直不显示
-            mWebSettings.setBuiltInZoomControls(false);
-            mWebSettings.setSavePassword(false);
-            mWebSettings.setJavaScriptEnabled(supportJs);
-            if (supportJs == true) {
-                webView.addJavascriptInterface(jsInteraction, jsName);
-            }
 //            if (cahceEnabled == true) {
 //                if (NetStatusUtil.isNetworkConnected(mCtonext)) {
 //                    //根据cache-control获取数据。
@@ -168,47 +166,78 @@ public class WebController {
 //                    mWebSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 //                }
 //            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // 适配5.0不允许http和https混合使用情况
-                mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-            }
-            mWebSettings.setTextZoom(100);
-            mWebSettings.setDatabaseEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // 适配5.0不允许http和https混合使用情况
+            mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        mWebSettings.setTextZoom(100);
+        mWebSettings.setDatabaseEnabled(true);
 //            mWebSettings.setAppCacheEnabled(true);
-            mWebSettings.setLoadsImagesAutomatically(true);////支持自动加载图片
-            mWebSettings.setSupportMultipleWindows(false);
-            // 是否阻塞加载网络图片  协议http or https
-            mWebSettings.setBlockNetworkImage(false);
-            // 允许加载本地文件html  file协议
-            mWebSettings.setAllowFileAccess(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                // 通过 file url 加载的 Javascript 读取其他的本地文件 .建议关闭
-                mWebSettings.setAllowFileAccessFromFileURLs(false);
-                // 允许通过 file url 加载的 Javascript 可以访问其他的源，包括其他的文件和 http，https 等其他的源
-                mWebSettings.setAllowUniversalAccessFromFileURLs(false);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-            } else {
-                mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-            }
-            mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过JS打开新窗口
-            mWebSettings.setLoadWithOverviewMode(false);// 	是否使用概览模式
-            mWebSettings.setUseWideViewPort(false);// 	是否允许使用 <viewport> 标签 将图片调整到适合webview的大小
-            mWebSettings.setDomStorageEnabled(true);// 	是否使用文档存储
-            mWebSettings.setNeedInitialFocus(true);// //当webview调用requestFocus时为webview设置节点
-            mWebSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
-            mWebSettings.setGeolocationEnabled(true);// 是否使用地理位置
-            // 缓存路径配置
+        mWebSettings.setLoadsImagesAutomatically(true);////支持自动加载图片
+        mWebSettings.setSupportMultipleWindows(false);
+        // 是否阻塞加载网络图片  协议http or https
+        mWebSettings.setBlockNetworkImage(false);
+        // 允许加载本地文件html  file协议
+        mWebSettings.setAllowFileAccess(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            // 通过 file url 加载的 Javascript 读取其他的本地文件 .建议关闭
+            mWebSettings.setAllowFileAccessFromFileURLs(false);
+            // 允许通过 file url 加载的 Javascript 可以访问其他的源，包括其他的文件和 http，https 等其他的源
+            mWebSettings.setAllowUniversalAccessFromFileURLs(false);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        } else {
+            mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        }
+        mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过JS打开新窗口
+        mWebSettings.setLoadWithOverviewMode(false);// 	是否使用概览模式
+        mWebSettings.setUseWideViewPort(false);// 	是否允许使用 <viewport> 标签 将图片调整到适合webview的大小
+        mWebSettings.setDomStorageEnabled(true);// 	是否使用文档存储
+        mWebSettings.setNeedInitialFocus(true);// //当webview调用requestFocus时为webview设置节点
+        mWebSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+        mWebSettings.setGeolocationEnabled(true);// 是否使用地理位置
+        // 缓存路径配置
 //            String dir = mCtonext.getCacheDir().getAbsolutePath() + AGENTWEB_CACHE_PATCH;
-            // 设置数据库路径  api19 已经废弃,这里只针对 webkit 起作用
+        // 设置数据库路径  api19 已经废弃,这里只针对 webkit 起作用
 //            mWebSettings.setGeolocationDatabasePath(dir);
 //            mWebSettings.setDatabasePath(dir);
 //            mWebSettings.setAppCachePath(dir);
-            // 缓存文件最大值
-            mWebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
+        // 缓存文件最大值
+        mWebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
 //            webView.setWebChromeClient(wvcc);
+        if (isSupportWebHead == true && webHeadMap != null) {
+            webView.loadUrl(url, webHeadMap);
+        } else {
+            if (isSupportWebHead == true) {
+                Log.e(TAG, "设置了Webview请求头，但是请求头Map值为空,请检查setWebHead是否正确调用！");
+            }
             webView.loadUrl(url);
+        }
+    }
+
+    public static class WebParams {
+        public String TAG = "SixWeb->P";
+        public Context mContext;
+        public String url;
+        public android.webkit.WebView webView;
+        public boolean supportJs;
+        public boolean isSupportWebHead;
+        public String jsName;
+        public JSInteraction jsInteraction;
+        //        public WebViewListener.WebChromeClientListener webChromeClient;
+        public WebChromeClientListener webChromeClient;
+        public WebViewClientListener webViewClient;
+        public OnLongClickListener onLongClickListener;
+        public Map<String, String> webHeadMap;
+//        public WebViewListener.WebViewClientListener webViewClient;
+
+        public WebParams(Context context) {
+            mContext = context;
+        }
+
+        public void setWebSetting(WebController C) {
+            C.setWebSetting();
         }
 
         /**
@@ -224,13 +253,13 @@ public class WebController {
                     sixWebviewExcetion.printStackTrace();
                 }
             } else {
-                Log.i("Test->", "applay->setWebView");
                 C.setWebView(webView);
             }
             if (url != null && !TextUtils.isEmpty(url)) {
                 C.setUrl(url);
+            } else {
+                Toast.makeText(mContext, "URL为空!", Toast.LENGTH_SHORT).show();
             }
-
             // 设置js交互
             if (supportJs == true) {
                 if (jsName != null && jsInteraction != null) {
@@ -245,6 +274,7 @@ public class WebController {
             } else {
                 Log.i(TAG, "Don't Support JSInteraction");
             }
+
             if (webChromeClient != null) {
                 C.setWebChromeClient(webChromeClient);
             } else {
@@ -259,6 +289,8 @@ public class WebController {
             if (onLongClickListener != null) {
                 C.setOnLongClickListener(onLongClickListener);
             }
+            C.setWebHead(isSupportWebHead, webHeadMap);
+
         }
     }
 }

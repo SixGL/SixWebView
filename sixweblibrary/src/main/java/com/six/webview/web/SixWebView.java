@@ -7,6 +7,8 @@ import com.six.webview.web.listener.OnLongClickListener;
 import com.six.webview.web.listener.WebChromeClientListener;
 import com.six.webview.web.listener.WebViewClientListener;
 
+import java.util.Map;
+
 /**
  * Created by admin on 2018/9/4.
  */
@@ -22,7 +24,6 @@ public class SixWebView {
     }
 
     public void setWebView(android.webkit.WebView webView) {
-        Log.i("Test->","SixWebView->setWebView");
         C.setWebView(webView);
     }
 
@@ -85,6 +86,14 @@ public class SixWebView {
             P.supportJs = b;
             return this;
         }
+        /**
+         * 设置webview支持添加请求头
+         * */
+        public Builder setWebHead(boolean b,Map<String, String> headMap) {
+            P.isSupportWebHead = b;
+            P.webHeadMap = headMap;
+            return this;
+        }
 
         /**
          * 设置WebChromeClient
@@ -109,8 +118,6 @@ public class SixWebView {
             return this;
         }
 
-
-
         private SixWebView create() {
             SixWebView webView = new SixWebView(P.mContext);
             P.applay(webView.C);
@@ -119,7 +126,7 @@ public class SixWebView {
 
         public SixWebView loadUrl() {
             SixWebView webView = create();
-            P.setWebSetting();
+            P.setWebSetting(webView.C);
             return webView;
         }
     }

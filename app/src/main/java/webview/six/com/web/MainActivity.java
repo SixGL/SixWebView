@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 setWebView(mWebview)
                 .setSupportJS(true)
                 .setUrl(url)
+                .setWebHead(true,null)
                 .setJavaScriptEnabled("haha", new WebJs(this))
                 .setWebChromeClient(new WebChromeClientListener() {
                     @Override
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .setWebViewClient(new WebViewClientListener() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
 
                     @Override
                     public void onPageStarted(android.webkit.WebView view, String url, Bitmap favicon) {
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPageFinished(android.webkit.WebView view, String url) {
                         Log.i("MainActivity->", "onPageFinished-> webViewClientListener ->" + url);
-
                     }
                 })
                 .setOnLongClickListener(new OnLongClickListener() {
