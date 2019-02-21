@@ -1,13 +1,26 @@
 # SixWebView
 Webview以构造者设计模式封装，快捷使用方式
-# 使用
-  compile 'com.github.SixGL:SixWebView:V1.0'
+
+     
+## 依赖
+    项目gradle
+    allprojects {
+    maven { url 'https://jitpack.io' }
+    }
+    
+
+    app.gradle 依赖
+    implementation 'com.github.SixGL:SixWebView:V1.2'
 ## 使用方式
+    
+    
+
      SixWebView builder = new SixWebView.Builder(this).
                 setWebView(mWebview)
-                .setSupportJS(true)//设置是否支持jS交互
+                .setSupportJS(true)
                 .setUrl(url)
-                .setJavaScriptEnabled("haha", new WebJs(this))// 第一个参数是js交互协议  第二个是js交互的对象
+                .setWebHead(true,null)// 设置为true 第二个参数是一个Map<String ,String >
+                .setJavaScriptEnabled("haha", new WebJs(this))
                 .setWebChromeClient(new WebChromeClientListener() {
                     @Override
                     public void onReceivedTitle(android.webkit.WebView view, String title) {
@@ -15,6 +28,10 @@ Webview以构造者设计模式封装，快捷使用方式
                     }
                 })
                 .setWebViewClient(new WebViewClientListener() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        return super.shouldOverrideUrlLoading(view, url);
+                    }
 
                     @Override
                     public void onPageStarted(android.webkit.WebView view, String url, Bitmap favicon) {
@@ -24,7 +41,6 @@ Webview以构造者设计模式封装，快捷使用方式
                     @Override
                     public void onPageFinished(android.webkit.WebView view, String url) {
                         Log.i("MainActivity->", "onPageFinished-> webViewClientListener ->" + url);
-
                     }
                 })
                 .setOnLongClickListener(new OnLongClickListener() {
@@ -35,9 +51,8 @@ Webview以构造者设计模式封装，快捷使用方式
                     }
                 })
                 .loadUrl();
-                
 
-### js交互对象
+## js交互对象
     public class WebJs extends JSInteraction {
 		//客户端与js交互的方式  卸载这里
     public WebJs(Context context) {
