@@ -117,6 +117,13 @@ public class SixWebView {
             P.onLongClickListener = onLongClickListener;
             return this;
         }
+        /**
+         * 设置WWebview 支持调用相机相册进行添加图片（5.0以上）
+         */
+        public Builder setIsSupportAddPhoto(boolean isSupportAddPhoto) {
+            P.isSupportAddPhoto = isSupportAddPhoto;
+            return this;
+        }
 
         private SixWebView create() {
             SixWebView webView = new SixWebView(P.mContext);

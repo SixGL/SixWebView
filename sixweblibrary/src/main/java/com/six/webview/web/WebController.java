@@ -3,6 +3,7 @@ package com.six.webview.web;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class WebController {
     public JSInteraction jsInteraction;
     public WebChromeClientListener webChromeClient;
     public WebViewClientListener webViewClient;
+    private boolean isSupportAddPhoto = false;
 
     public WebController(Context context) {
         mContext = context;
@@ -73,6 +75,11 @@ public class WebController {
         this.webHeadMap = headMap;
     }
 
+    public void setIsSupportAddPhoto(boolean isSupportAddPhoto) {
+        this.isSupportAddPhoto = isSupportAddPhoto;
+    }
+
+
     /**
      * 设置是否支持js交互 默认支持js交互如果不需要支持 调用此方法，传入false
      */
@@ -84,7 +91,7 @@ public class WebController {
      * 设置WebChromeClient
      */
     public void setWebChromeClient(final WebChromeClientListener webChromeClient) {
-        webView.setWebChromeClient(new WebChromeClient() {
+        SWebChromeClient sWebChromeClient = new SWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
@@ -94,7 +101,27 @@ public class WebController {
                     Log.i(TAG, "onReceivedTitle-> WebChromeClientListener is null");
                 }
             }
-        });
+        };
+        if (isSupportAddPhoto) {
+            sWebChromeClient.setOpenFileChooserCallBack(new SWebChromeClient.OpenFileChooserCallBack() {
+                @Override
+                public void openFileChooserCallBack(ValueCallback<Uri> uploadMsg, String acceptType) {
+//                if (webChromeClient!=null){
+//                    webChromeClient.openFileChooserCallBack(uploadMsg, acceptType);
+//                }
+                }
+
+
+                @Override
+                public void showFileChooserCallBack(ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                    if (webChromeClient != null) {
+                        webChromeClient.showFileChooserCallBack(filePathCallback, fileChooserParams);
+                    }
+                }
+            });
+
+        }
+        webView.setWebChromeClient(sWebChromeClient);
     }
 
     /**
@@ -225,12 +252,11 @@ public class WebController {
         public boolean isSupportWebHead;
         public String jsName;
         public JSInteraction jsInteraction;
-        //        public WebViewListener.WebChromeClientListener webChromeClient;
         public WebChromeClientListener webChromeClient;
         public WebViewClientListener webViewClient;
         public OnLongClickListener onLongClickListener;
         public Map<String, String> webHeadMap;
-//        public WebViewListener.WebViewClientListener webViewClient;
+        public boolean isSupportAddPhoto = false;
 
         public WebParams(Context context) {
             mContext = context;
@@ -290,6 +316,7 @@ public class WebController {
                 C.setOnLongClickListener(onLongClickListener);
             }
             C.setWebHead(isSupportWebHead, webHeadMap);
+            C.setIsSupportAddPhoto(isSupportAddPhoto);
 
         }
     }
