@@ -10,7 +10,8 @@ Webview以构造者设计模式封装，快捷使用方式
     
 
     app.gradle 依赖
-    implementation 'com.github.SixGL:SixWebView:V1.2'
+    
+     implementation 'com.github.SixGL:SixWebView:V1.2.1'
 ## 使用方式
     
     
