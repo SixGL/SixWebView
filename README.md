@@ -18,6 +18,7 @@ Webview以构造者设计模式封装，快捷使用方式
      SixWebView builder = new SixWebView.Builder(this).
                 setWebView(mWebview)
                 .setSupportJS(true)
+		.setIsSupportAddPhoto(true)
                 .setUrl(url)
                 .setWebHead(true,null)// 设置为true 第二个参数是一个Map<String ,String >
                 .setJavaScriptEnabled("haha", new WebJs(this))
@@ -25,6 +26,16 @@ Webview以构造者设计模式封装，快捷使用方式
                     @Override
                     public void onReceivedTitle(android.webkit.WebView view, String title) {
                         Log.i("MainActivity->", "onReceivedTitle->" + title);
+                    }
+		     @Override
+                   public void showFileChooserCallBack(ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams) {
+                        super.showFileChooserCallBack(filePathCallback, fileChooserParams);
+                        Log.i("MainActivity->", "showFileChooserCallBack->");
+                            /**
+                             * 选择相册还是相机的弹窗由客户端自己定义
+                             * 申请权限等操作由客户端进行操作
+                             * */
+
                     }
                 })
                 .setWebViewClient(new WebViewClientListener() {
