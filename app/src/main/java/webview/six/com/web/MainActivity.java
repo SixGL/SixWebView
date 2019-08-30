@@ -16,6 +16,9 @@ import com.six.webview.web.listener.OnLongClickListener;
 import com.six.webview.web.listener.WebChromeClientListener;
 import com.six.webview.web.listener.WebViewClientListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private static String url = "https://blog.csdn.net/qq_34501274";
@@ -41,12 +44,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        AlertDialog
+        url = "http://www.baidu.com";
+        Map map=new HashMap<String,String>();
+        map.put("gt", "token");
         SixWebView builder = new SixWebView.Builder(this).
                 setWebView(mWebview)
                 .setSupportJS(true)
                 .setIsSupportAddPhoto(true)
                 .setUrl(url)
-                .setWebHead(true,null)
+                .setUserAgentString("UASSSS")
+                .setWebHead(true,map)
                 .setJavaScriptEnabled("haha", new WebJs(this))
                 .setWebChromeClient(new WebChromeClientListener() {
                     @Override

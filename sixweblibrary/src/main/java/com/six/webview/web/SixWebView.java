@@ -125,6 +125,14 @@ public class SixWebView {
             return this;
         }
 
+        /**
+         * 设置WWebview ua
+         */
+        public Builder setUserAgentString(String ua) {
+            P.ua = ua;
+            return this;
+        }
+
         private SixWebView create() {
             SixWebView webView = new SixWebView(P.mContext);
             P.applay(webView.C);

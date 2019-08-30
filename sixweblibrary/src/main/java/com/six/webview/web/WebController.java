@@ -26,6 +26,7 @@ public class WebController {
     public String TAG = "SixWeb->C ";
     public Context mContext;
     public String url;
+    public String userAgentString;
     public android.webkit.WebView webView;
     public boolean supportJs = true;
     public boolean isSupportWebHead = false;
@@ -53,6 +54,14 @@ public class WebController {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    /**
+     * /**
+     * 设置Webview ua
+     */
+    public void setUserAgentString(String ua) {
+        this.userAgentString = ua;
     }
 
     /**
@@ -176,6 +185,12 @@ public class WebController {
     @SuppressLint("JavascriptInterface")
     public void setWebSetting() {
         WebSettings mWebSettings = webView.getSettings();
+        String userAgent = mWebSettings.getUserAgentString();
+        if (userAgentString != null && !TextUtils.isEmpty(userAgentString)) {
+            mWebSettings.setUserAgentString(userAgentString);
+            Log.i(TAG, userAgent + "," + userAgentString);
+        }
+
         webView.setHorizontalScrollBarEnabled(false);//水平不显示
         webView.setVerticalScrollBarEnabled(false); //垂直不显示
         mWebSettings.setBuiltInZoomControls(false);
@@ -234,6 +249,7 @@ public class WebController {
         mWebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
 //            webView.setWebChromeClient(wvcc);
         if (isSupportWebHead == true && webHeadMap != null) {
+            Log.i(TAG, webHeadMap.toString());
             webView.loadUrl(url, webHeadMap);
         } else {
             if (isSupportWebHead == true) {
@@ -251,6 +267,7 @@ public class WebController {
         public boolean supportJs;
         public boolean isSupportWebHead;
         public String jsName;
+        public String ua;
         public JSInteraction jsInteraction;
         public WebChromeClientListener webChromeClient;
         public WebViewClientListener webViewClient;
@@ -317,6 +334,7 @@ public class WebController {
             }
             C.setWebHead(isSupportWebHead, webHeadMap);
             C.setIsSupportAddPhoto(isSupportAddPhoto);
+            C.setUserAgentString(ua);
 
         }
     }
