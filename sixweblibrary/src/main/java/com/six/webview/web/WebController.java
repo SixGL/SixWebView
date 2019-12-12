@@ -28,6 +28,7 @@ public class WebController {
     public String url;
     public String userAgentString;
     public android.webkit.WebView webView;
+    public boolean supportWebscreenHot = false;
     public boolean supportJs = true;
     public boolean isSupportWebHead = false;
     public Map<String, String> webHeadMap;
@@ -42,26 +43,31 @@ public class WebController {
     }
 
     /**
-     * 传入Webview
+     * @param webView
      */
     public void setWebView(android.webkit.WebView webView) {
-        Log.i("Test->", "WebController->setWebView");
         this.webView = webView;
     }
 
     /**
-     * 设置Webview 加载Url
+     * @param url 加载Url
      */
     public void setUrl(String url) {
         this.url = url;
     }
 
     /**
-     * /**
-     * 设置Webview ua
+     * @param ua Webview ua
      */
     public void setUserAgentString(String ua) {
         this.userAgentString = ua;
+    }
+
+    /**
+     * @param screenHot 支持webview截图 默认不支持
+     */
+    public void isWebscreenHot(boolean screenHot) {
+        this.supportWebscreenHot = screenHot;
     }
 
     /**
@@ -77,7 +83,8 @@ public class WebController {
     }
 
     /**
-     * 设置webview支持添加请求头
+     * @param b       true 支持添加请求头
+     * @param headMap 添加请求头
      */
     public void setWebHead(boolean b, Map<String, String> headMap) {
         this.isSupportWebHead = b;
@@ -90,15 +97,14 @@ public class WebController {
 
 
     /**
-     * 设置是否支持js交互 默认支持js交互如果不需要支持 调用此方法，传入false
+     * @param b true：支持js交互 默认支持
+     *          false：不支持
      */
     public void setSupportJS(boolean b) {
         this.supportJs = b;
     }
 
-    /**
-     * 设置WebChromeClient
-     */
+
     public void setWebChromeClient(final WebChromeClientListener webChromeClient) {
         SWebChromeClient sWebChromeClient = new SWebChromeClient() {
             @Override
@@ -184,11 +190,18 @@ public class WebController {
 
     @SuppressLint("JavascriptInterface")
     public void setWebSetting() {
+
+        if (supportWebscreenHot) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                android.webkit.WebView.enableSlowWholeDocumentDraw();
+            }
+            webView.setDrawingCacheEnabled(true);
+        }
         WebSettings mWebSettings = webView.getSettings();
         String userAgent = mWebSettings.getUserAgentString();
         if (userAgentString != null && !TextUtils.isEmpty(userAgentString)) {
             mWebSettings.setUserAgentString(userAgentString);
-            Log.i(TAG, userAgent + "," + userAgentString);
+            Log.i(TAG, userAgent + " : " + userAgentString);
         }
 
         webView.setHorizontalScrollBarEnabled(false);//水平不显示
@@ -264,6 +277,7 @@ public class WebController {
         public Context mContext;
         public String url;
         public android.webkit.WebView webView;
+        public boolean supportWebscreenHot=false;
         public boolean supportJs;
         public boolean isSupportWebHead;
         public String jsName;
@@ -335,6 +349,7 @@ public class WebController {
             C.setWebHead(isSupportWebHead, webHeadMap);
             C.setIsSupportAddPhoto(isSupportAddPhoto);
             C.setUserAgentString(ua);
+            C.isWebscreenHot(supportWebscreenHot);
 
         }
     }

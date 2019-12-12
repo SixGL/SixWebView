@@ -1,0 +1,9 @@
+<resources>
+
+
+    <style name="ProgressBar_Scale" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:progressDrawable">@drawable/s_pro_style</item>
+    </style>
+
+</resources>

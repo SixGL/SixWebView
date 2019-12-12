@@ -50,7 +50,7 @@ public class SixWebView {
         }
 
         /**
-         * 传入Webview
+         * @param webView 传入Webview对象
          */
         public Builder setWebView(android.webkit.WebView webView) {
             Log.i("Test->","Builder->setWebView");
@@ -59,7 +59,7 @@ public class SixWebView {
         }
 
         /**
-         * 设置Webview 加载Url
+         * @param url 加载Url
          */
         public Builder setUrl(String url) {
             P.url = url;
@@ -67,8 +67,6 @@ public class SixWebView {
         }
 
         /**
-         * 设置Js 交互协议
-         *
          * @param jsName        js交互协议名字
          * @param jsInteraction js交互对象
          */
@@ -79,7 +77,7 @@ public class SixWebView {
         }
 
         /**
-         * 设置是否支持js交互
+         * @param b 设置是否支持js交互
          * 默认支持js交互如果不需要支持 调用此方法，传入false
          */
         public Builder setSupportJS(boolean b) {
@@ -87,7 +85,15 @@ public class SixWebView {
             return this;
         }
         /**
-         * 设置webview支持添加请求头
+         * @param screenHot true 支持webview截长图
+         */
+        public Builder isWebScreenHot(boolean screenHot) {
+            P.supportWebscreenHot = screenHot;
+            return this;
+        }
+        /**
+         * @param b true 支持添加请求头
+         * @param headMap 请求头的传输格式
          * */
         public Builder setWebHead(boolean b,Map<String, String> headMap) {
             P.isSupportWebHead = b;
@@ -96,6 +102,7 @@ public class SixWebView {
         }
 
         /**
+         * @param webChromeClient
          * 设置WebChromeClient
          */
         public Builder setWebChromeClient(WebChromeClientListener webChromeClient) {
@@ -104,6 +111,7 @@ public class SixWebView {
         }
 
         /**
+         * @param webViewClient
          * 设置WebViewClient
          */
         public Builder setWebViewClient(WebViewClientListener webViewClient) {
@@ -111,14 +119,15 @@ public class SixWebView {
             return this;
         }
         /**
-         * 设置WWebview 长按事件
+         *@param onLongClickListener
+         *  设置WWebview 长按事件
          */
         public Builder setOnLongClickListener(OnLongClickListener onLongClickListener) {
             P.onLongClickListener = onLongClickListener;
             return this;
         }
         /**
-         * 设置WWebview 支持调用相机相册进行添加图片（5.0以上）
+         * @param isSupportAddPhoto 支持调用相机相册进行添加图片（5.0以上）
          */
         public Builder setIsSupportAddPhoto(boolean isSupportAddPhoto) {
             P.isSupportAddPhoto = isSupportAddPhoto;
@@ -126,7 +135,7 @@ public class SixWebView {
         }
 
         /**
-         * 设置WWebview ua
+         * @param ua 设置Webview ua
          */
         public Builder setUserAgentString(String ua) {
             P.ua = ua;
