@@ -1,6 +1,8 @@
 # SixWebView
 Webview以构造者设计模式封装，快捷使用方式、webview长图
 
+##示例
+     ![image](https://github.com/SixGL/SixWebView/blob/master/simple.gif)
      
 ## 依赖
     项目gradle
