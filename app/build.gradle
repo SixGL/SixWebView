@@ -23,7 +23,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
 //    implementation project(':sixweblibrary')
-    implementation 'com.github.SixGL:SixWebView:v1.3.0'
+    implementation 'com.github.SixGL:SixWebView:v1.2.3'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 

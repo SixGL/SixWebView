@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 .isScreenSHotLoading(true)
                 .setDelayTime(200)
                 .isReloadWeb(true)
+
                 .toScreenSHot()
                 .toCancvas(new ScreenShotCallback() {
                     @Override
