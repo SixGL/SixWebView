@@ -11,7 +11,7 @@ Webview以构造者设计模式封装，快捷使用方式
 
     app.gradle 依赖
     
-     implementation 'com.github.SixGL:SixWebView:V1.2.1'
+     implementation 'com.github.SixGL:SixWebView:1.2.2'
 ## 使用方式
     
     
@@ -21,6 +21,7 @@ Webview以构造者设计模式封装，快捷使用方式
                 .setSupportJS(true)
 		.setIsSupportAddPhoto(true)
                 .setUrl(url)
+		.setUserAgentString("UASSSS")
                 .setWebHead(true,null)// 设置为true 第二个参数是一个Map<String ,String >
                 .setJavaScriptEnabled("haha", new WebJs(this))
                 .setWebChromeClient(new WebChromeClientListener() {
@@ -70,4 +71,3 @@ Webview以构造者设计模式封装，快捷使用方式
     public WebJs(Context context) {
         super(context);
     }
-
