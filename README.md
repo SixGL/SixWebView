@@ -83,7 +83,7 @@ Webview以构造者设计模式封装，快捷使用方式、webview长图
         instance = SWebScreenShot.INSTANCE
                 .toInit(MainActivity.this, mWebview)
                 .isScreenSHotLoading(true) // 默认true,提供截图时的loading
-                .setDelayTime(200)// 截取长图延迟时间 （需要延迟原因：请看源码注释）
+                .setDelayTime(300)// 截取长图延迟时间 （需要延迟原因：请看源码注释）如果存在截取的图不完整情况，可以尝试调整一下延迟截取时间
                 .isReloadWeb(true)// webview重载
                 .toScreenSHot()// webview 截取前准备（测量宽高）
                 .toCancvas(new ScreenShotCallback() {// 截取回调
