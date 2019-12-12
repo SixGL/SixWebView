@@ -73,7 +73,7 @@ public enum SWebScreenShot {
      *               如果开发者自己去决定什么时候重新reload，传入false即可。开发者可以选择合适的时机web重新reload
      */
     public SWebScreenShot isReloadWeb(boolean reload) {
-        isLoading = reload;
+        isReloadWeb = reload;
         return this;
     }
 
@@ -107,6 +107,7 @@ public enum SWebScreenShot {
                     canvas.drawBitmap(longImage, 0f, mWeb.getMeasuredHeight(), paint);
                     mWeb.draw(canvas);
                     if (isReloadWeb) {
+                        Log.e("SixWeb", "isReloadWeb "+isReloadWeb);
                         mWeb.reload();
                     }
                     SaveIm screenShot = new SaveIm();

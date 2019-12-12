@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         instance = SWebScreenShot.INSTANCE
                 .toInit(MainActivity.this, mWebview)
                 .isScreenSHotLoading(true)
-                .setDelayTime(200)
+                .setDelayTime(300)
                 .isReloadWeb(true)
 
                 .toScreenSHot()
